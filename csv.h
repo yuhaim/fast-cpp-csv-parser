@@ -49,6 +49,46 @@
 #include <cerrno>
 #include <istream>
 
+
+#if defined(_MSC_VER) && (_MSC_VER <= 1800)
+#if !defined(constexpr)
+#define constexpr
+#endif
+#if !defined(CSV_IO_MSVC_NO_SNPRINTF)
+#include <cstdarg>
+namespace std
+{
+
+        inline int c99_vsnprintf(char *str, size_t size, const char *format, va_list ap)
+        {
+                int count = -1;
+
+                if (size != 0)
+                        count = _vsnprintf_s(str, size, _TRUNCATE, format, ap);
+                if (count == -1)
+                        count = _vscprintf(format, ap);
+
+                return count;
+        }
+
+        inline int snprintf(char *str, size_t size, const char *format, ...)
+        {
+                int count;
+                va_list ap;
+
+                va_start(ap, format);
+                count = c99_vsnprintf(str, size, format, ap);
+                va_end(ap);
+
+                return count;
+        }
+
+        //using namespace std;
+
+} //namespace std
+#endif //CSV_IO_MSVC_NO_SNPRINTF
+#endif // _MSC_VER
+
 namespace io{
         ////////////////////////////////////////////////////////////////////////////
         //                                 LineReader                             //
