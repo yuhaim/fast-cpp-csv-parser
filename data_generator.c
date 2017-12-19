@@ -3,8 +3,8 @@
 
 int main(void)
 {
-    const char *dataFileName = "D:\\csvData.csv";
-    const int dataLength = 5000000;
+    const char *dataFileName = "D:\\csvData_short.csv";
+    const int dataLength = 101;
     //const int dataLength = 10000;
     double pi = 2.0*acos(0.0);
     double t;
